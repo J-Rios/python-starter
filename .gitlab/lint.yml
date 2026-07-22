@@ -14,5 +14,6 @@ lint:all:
   allow_failure: false
   only:
     - merge_requests
-    - develop
     - main
+    - streamlit
+    - development
