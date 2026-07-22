@@ -1,0 +1,4 @@
+include:
+  - local: '.gitlab/setup.yml'
+  - local: '.gitlab/lint.yml'
+  - local: '.gitlab/test.yml'

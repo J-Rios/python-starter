@@ -1,0 +1,29 @@
+###############################################################################
+# GitLab CI - Test Stage
+###############################################################################
+# Unit tests, coverage reporting, and test artifacts
+
+test:pytest:
+  stage: test
+  image: python:${PYTHON_VERSION}
+  needs:
+    - setup:dependencies
+  script:
+    - echo "Running tests..."
+    - make test
+  coverage: '/^TOTAL\s+\d+\s+\d+\s+(\d+)%/'
+  artifacts:
+    name: coverage
+    paths:
+      - htmlcov/
+      - coverage.xml
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    expire_in: 30 days
+  allow_failure: false
+  only:
+    - merge_requests
+    - develop
+    - main

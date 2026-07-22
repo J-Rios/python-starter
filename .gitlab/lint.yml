@@ -1,0 +1,18 @@
+###############################################################################
+# GitLab CI - Linting Stage
+###############################################################################
+# Code quality checks: black, isort, flake8, pylint, mypy
+
+lint:all:
+  stage: lint
+  image: python:${PYTHON_VERSION}
+  needs:
+    - setup:dependencies
+  script:
+    - echo "Running linters..."
+    - make lint
+  allow_failure: false
+  only:
+    - merge_requests
+    - develop
+    - main

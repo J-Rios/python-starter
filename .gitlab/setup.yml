@@ -1,0 +1,42 @@
+###############################################################################
+# GitLab CI - Setup Stage
+###############################################################################
+# Common setup job configuration and variables
+
+stages:
+  - setup
+  - lint
+  - test
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PYTHON_VERSION: "3.11"
+
+cache:
+  paths:
+    - .cache/pip
+    - .venv
+
+before_script:
+  - python --version
+  - pip --version
+
+###############################################################################
+# Setup Job
+###############################################################################
+
+setup:dependencies:
+  stage: setup
+  image: python:${PYTHON_VERSION}
+  script:
+    - echo "Setting up Python environment..."
+    - make setup
+    - echo "Dependencies installed successfully"
+  artifacts:
+    paths:
+      - .venv
+    expire_in: 1 hour
+  only:
+    - merge_requests
+    - development
+    - main
