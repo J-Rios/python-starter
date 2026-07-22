@@ -21,15 +21,25 @@ make run
 
 # A) Stop local execution
 make stop
+
+# B) Or install it as a Linux service
+make install
+
+# B) Uninstall it
+make uninstall
 ```
 
+## Extra Documents
+
 - **[QUICKSTART.md](doc/readme/QUICKSTART.md)** - Get started in 5 minutes
+- **[DEPLOYMENT.md](doc/readme/DEPLOYMENT.md)** - System installation & management
 
 ## Features
 
 - 🏗️ Well-organized project structure
-- 🔧 One-command setup (`make setup`)
+- 🔧 One-command setup with `make setup`
 - 💻 Local development mode (`make start`)
+- 🐧 Linux systemd service integration (`sudo make install`)
 - 📝 Comprehensive logging
 - 🧪 Unit testing with pytest
 - 🎨 Code formatting (black, isort)
@@ -46,11 +56,32 @@ All configuration is centralized in `config.sh`:
 ```bash
 APP_NAME="python-starter"         # Application name
 APP_ENTRY="app.py"                # Entry point script
+APP_DIR="/opt/python-starter"     # Installation directory
 LOG_DIR="/var/log/python-starter" # Log directory
 ```
 
-Edit `config.sh` to customize the application.
+Edit `config.sh` to customize the application (i.e. for installation).
 
+## Linux Installation
+
+Install as a system service that auto-starts on boot:
+
+```bash
+make install
+```
+
+This will:
+- Create a system user `python-starter`
+- Install to `/opt/python-starter`
+- Setup logging at `/var/log/python-starter`
+- Enable auto-start via systemd
+
+Manage the service:
+```bash
+systemctl status python-starter
+sudo systemctl restart python-starter
+journalctl -u python-starter -f
+```
 
 ## Running Tests
 
@@ -94,8 +125,15 @@ make log           # Check logs
 make errors        # Check for errors
 ```
 
+**System installation issues:**
+```bash
+sudo systemctl status python-starter
+sudo journalctl -u python-starter -n 100
+```
+
 ## Useful Links
 
 - [Python Packaging Guide](https://packaging.python.org/)
 - [PEP 8 Style Guide](https://www.python.org/dev/peps/pep-0008/)
 - [pytest Documentation](https://docs.pytest.org/)
+- [systemd Documentation](https://wiki.debian.org/systemd)
