@@ -1,0 +1,23 @@
+# Testing
+pytest==7.4.4
+pytest-cov==4.1.0
+
+# Code Formatting & Style
+black==23.12.0
+isort==5.13.2
+flake8==6.1.0
+flake8-docstrings==1.7.0
+
+# Type Checking
+mypy==1.7.1
+pyright==1.1.341
+
+# Linting
+pylint==3.0.3
+
+# Git Hooks
+pre-commit==3.5.0
+
+# Development
+ipython==8.17.2
+notebook==7.0.6
