@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This document describes the deployment and installation procedures for the python-starter project on Linux systems.
+This document describes the deployment and installation procedures for the streamlit-starter project on Linux systems.
 
 ## Overview
 
@@ -14,7 +14,7 @@ deploy/
 │   ├── linux_install       # Linux installation script
 │   ├── linux_uninstall     # Linux uninstallation script
 │   ├── launcher            # Service launcher script
-│   └── python-starter.service  # Systemd service definition
+│   └── streamlit-starter.service  # Systemd service definition
 
 tools/
 ├── install                 # Linux installation wrapper
@@ -39,11 +39,11 @@ sudo deploy/linux/linux_install
 
 #### What Gets Installed
 
-- **Service User:** `python-starter` (non-privileged user)
-- **Installation Directory:** `/opt/python-starter/`
-- **Log Directory:** `/var/log/python-starter/`
-- **Service File:** `/etc/systemd/system/python-starter.service`
-- **Systemd Service:** `python-starter.service`
+- **Service User:** `streamlit-starter` (non-privileged user)
+- **Installation Directory:** `/opt/streamlit-starter/`
+- **Log Directory:** `/var/log/streamlit-starter/`
+- **Service File:** `/etc/systemd/system/streamlit-starter.service`
+- **Systemd Service:** `streamlit-starter.service`
 
 #### Installation Steps
 
@@ -51,9 +51,9 @@ The installation script performs these steps:
 
 1. **Verify root privileges** - Requires `sudo`
 2. **Create application user** - Non-privileged system user for running the service
-3. **Install application files** - Copies source code, dependencies config to `/opt/python-starter/`
+3. **Install application files** - Copies source code, dependencies config to `/opt/streamlit-starter/`
 4. **Setup virtual environment** - Creates `.venv/` and installs `requirements.txt`
-5. **Setup logging directory** - Creates `/var/log/python-starter/` with proper permissions
+5. **Setup logging directory** - Creates `/var/log/streamlit-starter/` with proper permissions
 6. **Configure systemd service** - Copies and enables the service file
 7. **Start the service** - Launches the application and verifies it's running
 
@@ -74,69 +74,69 @@ sudo deploy/linux/linux_uninstall
 #### What Gets Removed
 
 - Service files and configuration
-- Application directory (`/opt/python-starter/`)
-- Log directory (`/var/log/python-starter/`)
+- Application directory (`/opt/streamlit-starter/`)
+- Log directory (`/var/log/streamlit-starter/`)
 - Service user (optional - prompted during uninstall)
 
 #### Uninstallation Steps
 
 1. **Stop the service** - Gracefully stops the running application
 2. **Disable the service** - Prevents auto-start on boot
-3. **Remove service file** - Deletes `/etc/systemd/system/python-starter.service`
-4. **Remove application files** - Deletes `/opt/python-starter/`
-5. **Remove log files** - Deletes `/var/log/python-starter/`
-6. **Preserve user** - Keeps the `python-starter` user for permission history
+3. **Remove service file** - Deletes `/etc/systemd/system/streamlit-starter.service`
+4. **Remove application files** - Deletes `/opt/streamlit-starter/`
+5. **Remove log files** - Deletes `/var/log/streamlit-starter/`
+6. **Preserve user** - Keeps the `streamlit-starter` user for permission history
 
 ### Service Management
 
 #### View Status
 
 ```bash
-systemctl status python-starter
+systemctl status streamlit-starter
 ```
 
 #### Start/Stop/Restart
 
 ```bash
-sudo systemctl start python-starter
-sudo systemctl stop python-starter
-sudo systemctl restart python-starter
+sudo systemctl start streamlit-starter
+sudo systemctl stop streamlit-starter
+sudo systemctl restart streamlit-starter
 ```
 
 #### View Logs
 
 ```bash
 # Recent logs
-journalctl -u python-starter -n 50
+journalctl -u streamlit-starter -n 50
 
 # Follow logs in real-time
-journalctl -u python-starter -f
+journalctl -u streamlit-starter -f
 
 # Logs for last hour
-journalctl -u python-starter --since "1 hour ago"
+journalctl -u streamlit-starter --since "1 hour ago"
 
 # All logs from service file
-tail -f /var/log/python-starter/python-starter.log
+tail -f /var/log/streamlit-starter/streamlit-starter.log
 ```
 
 #### Enable/Disable Auto-start
 
 ```bash
-sudo systemctl enable python-starter   # Enable auto-start on boot
-sudo systemctl disable python-starter  # Disable auto-start on boot
+sudo systemctl enable streamlit-starter   # Enable auto-start on boot
+sudo systemctl disable streamlit-starter  # Disable auto-start on boot
 ```
 
 ## Configuration Files
 
 ### Systemd Service File
 
-**Location:** `/etc/systemd/system/python-starter.service`
+**Location:** `/etc/systemd/system/streamlit-starter.service`
 
 **Key Settings:**
 - `Type=simple` - Service type
-- `User=python-starter` - Runs as non-privileged user
-- `WorkingDirectory=/opt/python-starter` - Working directory
-- `ExecStart=/opt/python-starter/launcher` - Launcher script
+- `User=streamlit-starter` - Runs as non-privileged user
+- `WorkingDirectory=/opt/streamlit-starter` - Working directory
+- `ExecStart=/opt/streamlit-starter/launcher` - Launcher script
 - `Restart=always` - Auto-restart on failure
 - `RestartSec=10` - Wait 10s before restart
 
@@ -144,18 +144,18 @@ sudo systemctl disable python-starter  # Disable auto-start on boot
 
 ```bash
 # Edit the service file
-sudo nano /etc/systemd/system/python-starter.service
+sudo nano /etc/systemd/system/streamlit-starter.service
 
 # Reload systemd
 sudo systemctl daemon-reload
 
 # Restart service
-sudo systemctl restart python-starter
+sudo systemctl restart streamlit-starter
 ```
 
 ### Launcher Script
 
-**Location:** `/opt/python-starter/launcher`
+**Location:** `/opt/streamlit-starter/launcher`
 
 The launcher script:
 1. Sources the virtual environment
@@ -166,8 +166,8 @@ The launcher script:
 **Edit Launcher:**
 
 ```bash
-sudo nano /opt/python-starter/launcher
-sudo systemctl restart python-starter
+sudo nano /opt/streamlit-starter/launcher
+sudo systemctl restart streamlit-starter
 ```
 
 ## Troubleshooting
@@ -176,38 +176,38 @@ sudo systemctl restart python-starter
 
 ```bash
 # Check status
-systemctl status python-starter
+systemctl status streamlit-starter
 
 # View detailed logs
-journalctl -u python-starter -n 100
+journalctl -u streamlit-starter -n 100
 
 # Check if another instance is running
-ps aux | grep python-starter
+ps aux | grep streamlit-starter
 ```
 
 ### Permission Denied Errors
 
 ```bash
 # Fix ownership
-sudo chown -R python-starter:python-starter /opt/python-starter
-sudo chown -R python-starter:python-starter /var/log/python-starter
+sudo chown -R streamlit-starter:streamlit-starter /opt/streamlit-starter
+sudo chown -R streamlit-starter:streamlit-starter /var/log/streamlit-starter
 
 # Fix permissions
-sudo chmod 755 /opt/python-starter
-sudo chmod 644 /var/log/python-starter/python-starter.log
+sudo chmod 755 /opt/streamlit-starter
+sudo chmod 644 /var/log/streamlit-starter/streamlit-starter.log
 ```
 
 ### Virtual Environment Issues
 
 ```bash
 # Check venv
-ls -la /opt/python-starter/.venv
+ls -la /opt/streamlit-starter/.venv
 
 # Verify python
-/opt/python-starter/.venv/bin/python3 --version
+/opt/streamlit-starter/.venv/bin/python3 --version
 
 # Reinstall dependencies
-sudo -u python-starter /opt/python-starter/.venv/bin/pip install -r /opt/python-starter/requirements.txt
+sudo /opt/streamlit-starter/.venv/bin/pip install -r /opt/streamlit-starter/requirements.txt
 ```
 
 ### Port Already in Use
@@ -222,14 +222,14 @@ lsof -i :8000
 kill -9 <PID>
 
 # Or restart service
-sudo systemctl restart python-starter
+sudo systemctl restart streamlit-starter
 ```
 
 ### Check Disk Space
 
 ```bash
 # Check log size
-du -sh /var/log/python-starter/
+du -sh /var/log/streamlit-starter/
 
 # Rotate logs if too large
 sudo logrotate -f /etc/logrotate.conf
@@ -240,45 +240,45 @@ sudo logrotate -f /etc/logrotate.conf
 ### Backup Current Installation
 
 ```bash
-sudo cp -r /opt/python-starter /opt/python-starter.backup
+sudo cp -r /opt/streamlit-starter /opt/streamlit-starter.backup
 ```
 
 ### Update Application Files
 
 ```bash
 # Stop the service
-sudo systemctl stop python-starter
+sudo systemctl stop streamlit-starter
 
 # Copy new files
-sudo cp -r src/ /opt/python-starter/
-sudo cp requirements.txt /opt/python-starter/
+sudo cp -r src/ /opt/streamlit-starter/
+sudo cp requirements.txt /opt/streamlit-starter/
 
 # Update dependencies
-sudo -u python-starter /opt/python-starter/.venv/bin/pip install -r /opt/python-starter/requirements.txt
+sudo -u streamlit-starter /opt/streamlit-starter/.venv/bin/pip install -r /opt/streamlit-starter/requirements.txt
 
 # Start the service
-sudo systemctl start python-starter
+sudo systemctl start streamlit-starter
 ```
 
 ### Rollback to Previous Version
 
 ```bash
 # Stop the service
-sudo systemctl stop python-starter
+sudo systemctl stop streamlit-starter
 
 # Restore backup
-sudo rm -rf /opt/python-starter
-sudo mv /opt/python-starter.backup /opt/python-starter
+sudo rm -rf /opt/streamlit-starter
+sudo mv /opt/streamlit-starter.backup /opt/streamlit-starter
 
 # Start the service
-sudo systemctl start python-starter
+sudo systemctl start streamlit-starter
 ```
 
 ## Security Considerations
 
 ### Application User Isolation
 
-- Application runs as non-privileged `python-starter` user
+- Application runs as non-privileged `streamlit-starter` user
 - Cannot access system directories without explicit permission
 - Limits damage from security vulnerabilities
 

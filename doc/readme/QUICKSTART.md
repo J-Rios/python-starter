@@ -101,8 +101,8 @@ make clean
 Edit `config.sh` to customize:
 - `APP_NAME` - Application name
 - `APP_ENTRY` - Entry point script (app.py)
-- `APP_DIR` - Installation directory (/opt/python-starter)
-- `LOG_DIR` - Log directory (/var/log/python-starter)
+- `APP_DIR` - Installation directory (/opt/streamlit-starter)
+- `LOG_DIR` - Log directory (/var/log/streamlit-starter)
 
 ## System Installation (Linux)
 
@@ -113,24 +113,24 @@ sudo make install
 ```
 
 This will:
-- Install to `/opt/python-starter`
-- Setup logs at `/var/log/python-starter`
+- Install to `/opt/streamlit-starter`
+- Setup logs at `/var/log/streamlit-starter`
 - Enable auto-start on boot
 
 ### Manage the Service
 
 ```bash
 # View status
-systemctl status python-starter
+systemctl status streamlit-starter
 
 # View logs
-journalctl -u python-starter -f
+journalctl -u streamlit-starter -f
 
 # Restart
-sudo systemctl restart python-starter
+sudo systemctl restart streamlit-starter
 
 # Stop
-sudo systemctl stop python-starter
+sudo systemctl stop streamlit-starter
 ```
 
 ### Uninstall
@@ -169,13 +169,13 @@ python3 -c "import sys; print(sys.executable)"
 
 ```bash
 # Check permissions
-sudo ls -la /opt/python-starter
+sudo ls -la /opt/streamlit-starter
 
 # Check service
-sudo systemctl status python-starter
+sudo systemctl status streamlit-starter
 
 # View detailed logs
-sudo journalctl -u python-starter -n 100
+sudo journalctl -u streamlit-starter -n 100
 ```
 
 ## Next Steps

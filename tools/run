@@ -21,7 +21,7 @@ fi
 # Launch the application
 log_info "Starting application..."
 source_venv
-nohup ${PYTHON_CMD} -u "${PRJ_DIR}/src/${APP_ENTRY}" >> "${PRJ_DIR}/${DEV_LOG_FILE}" 2>&1 &
+nohup ${RUN_CMD} "${PRJ_DIR}/src/${APP_ENTRY}" >> "${PRJ_DIR}/${DEV_LOG_FILE}" 2>&1 &
 deactivate
 sleep 1
 "${SCRIPT_DIR}/status"

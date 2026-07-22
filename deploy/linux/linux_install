@@ -24,6 +24,9 @@ install_files() {
     # Copy source code
     cp -r "${PROJECT_ROOT}/src" "${APP_DIR}/"
 
+    # Copy resources
+    cp -r "${PROJECT_ROOT}/res" "${APP_DIR}/"
+
     # Copy configuration files
     cp "${PROJECT_ROOT}/pyproject.toml" "${APP_DIR}/"
     cp "${PROJECT_ROOT}/requirements.txt" "${APP_DIR}/"

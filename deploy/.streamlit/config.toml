@@ -1,0 +1,30 @@
+
+[global]
+developmentMode = false
+
+[browser]
+gatherUsageStats = false
+serverAddress = "localhost"
+serverPort = 65300
+
+[server]
+#address =
+port = 65300
+baseUrlPath = ""
+
+[client]
+# Change the visibility of items in the toolbar and options menu
+# Values: auto, developer, viewer, minimal
+toolbarMode = "auto"
+
+[theme]
+base = "dark"
+#primaryColor = "#F63366"
+#backgroundColor = "black"
+#secondaryBackgroundColor =
+#textColor =
+font = "monospace" # "sans serif", "serif" or "monospace"
+
+[logger]
+level = "info"
+messageFormat = "%(asctime)s %(message)s"

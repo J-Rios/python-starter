@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-# Launcher script for python-starter application
+# Launcher script for streamlit-starter application
 # This script is called by the systemd service
 
-APP_DIR="/opt/python-starter"
+APP_DIR="/opt/streamlit-starter"
 VENV_DIR="${APP_DIR}/.venv"
-LOG_FILE="/var/log/python-starter/python-starter.log"
+LOG_FILE="/var/log/streamlit-starter/streamlit-starter.log"
 
 # Ensure creation of log directory
 mkdir -p "$(dirname "$LOG_FILE")"
@@ -19,7 +19,7 @@ source "${VENV_DIR}/bin/activate"
 
 # Run the application
 cd "${APP_DIR}" || exit 1
-python3 src/app.py >> "$LOG_FILE" 2>&1
+python3 -m streamlit run ./src/app.py >> "$LOG_FILE" 2>&1
 
 # Deactivate virtual environment
 deactivate

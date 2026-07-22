@@ -3,9 +3,9 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "python-starter"
+name = "streamlit-starter"
 version = "1.0.0"
-description = "Base Python project template for starting new projects"
+description = "Base Python streamlit project template for starting new projects"
 readme = "README.md"
 requires-python = ">=3.8"
 authors = [
@@ -43,7 +43,7 @@ dev = [
 ]
 
 [project.scripts]
-python-starter = "src.app:app"
+streamlit = "src.app:app"
 
 [tool.setuptools]
 packages = ["src"]

@@ -7,7 +7,7 @@
 # Modify this file to customize the application behavior.
 
 # Application name (used for service, user, directories)
-export APP_NAME="python-starter"
+export APP_NAME="streamlit-starter"
 
 # Application entry point (relative to src/)
 export APP_ENTRY="app.py"
@@ -28,6 +28,7 @@ export DEV_LOG_FILE="output.log"
 # Python configuration
 export PYTHON_CMD="python3"
 export PIP_CMD="${VENV_DIR}/bin/pip"
+export RUN_CMD="python3 -m streamlit run"
 
 # Get project root directory
 export PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

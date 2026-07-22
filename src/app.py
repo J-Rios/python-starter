@@ -47,6 +47,9 @@ from traceback import format_exc
 # Local Libraries
 ###############################################################################
 
+# User Interface Library
+from ui import UserInterface
+
 
 ###############################################################################
 # Logger Setup
@@ -86,7 +89,37 @@ class RC:
 # Global Elements
 ###############################################################################
 
-# None
+# User Interface
+ui = UserInterface()
+
+
+###############################################################################
+# Left Sidebar Panel Button Functions
+###############################################################################
+
+def sidebar_btn_0_press():
+    '''UI Left Sidebar Panel Button_0 Press Handler.'''
+    logger.info("Pressed Sidebar Button 0")
+
+
+def sidebar_btn_1_press():
+    '''UI Left Sidebar Panel Button_1 Press Handler.'''
+    logger.info("Pressed Sidebar Button 1")
+
+
+def sidebar_btn_2_press():
+    '''UI Left Sidebar Panel Button_2 Press Handler.'''
+    logger.info("Pressed Sidebar Button 2")
+
+
+def sidebar_btn_3_press():
+    '''UI Left Sidebar Panel Button_3 Press Handler.'''
+    logger.info("Pressed Sidebar Button 3")
+
+
+def btn_clickme_press():
+    '''UI Click-Me Button Pressed.'''
+    logger.info("Button Click-Me Pressed")
 
 
 ###############################################################################
@@ -95,26 +128,20 @@ class RC:
 
 def main_loop(args) -> int:
     """Application Main loop."""
-    global uptime
-    logger.info(f"Uptime: {uptime} seconds")
-    uptime = uptime + 1
-    if uptime == 5:
-        logger.warning("a warning here")
-    if uptime == 10:
-        logger.error("an error here")
-    time.sleep(1)
-    return RC.RUNNING
+    return RC.SUCCESS
 
 
 def main_setup(args) -> int:
     """Application Main setup."""
-    global uptime
-    uptime = 0
-    logger.info("")
-    logger.info(f"Hello {args.user}, your ID is {args.id}")
-    logger.info("")
-    logger.info("Press Ctrl+C to exit the tool...")
-    logger.info("")
+    # Create UI and bind function callbacks
+    ui.callbacks.sidebar_btn_0.app = sidebar_btn_0_press
+    ui.callbacks.sidebar_btn_1.app = sidebar_btn_1_press
+    ui.callbacks.sidebar_btn_2.app = sidebar_btn_2_press
+    ui.callbacks.sidebar_btn_3.app = sidebar_btn_3_press
+    ui.callbacks.btn_clickme.app = btn_clickme_press
+    # Generate and show UI
+    ui.setup_page(PROJECT.NAME, "centered", PROJECT.DESCRIPTION,
+                  PROJECT.INFO_2)
     return RC.SUCCESS
 
 
@@ -149,7 +176,7 @@ def parse_args(argv):
 def main(argv=None) -> int:
     """Run the main application logic."""
     rc = RC.SUCCESS
-    logger.info("Starting Python Tool...")
+    logger.info("Starting Application...")
     args = parse_args(argv)
     rc = main_setup(args)
     if rc == RC.SUCCESS:
@@ -164,7 +191,7 @@ def main(argv=None) -> int:
                 rc = RC.FAILURE
             except KeyboardInterrupt:
                 break
-    logger.info("Exiting Python Tool...")
+    logger.info("Exiting Application...")
     if rc == RC.RUNNING:
         rc = RC.FAILURE
     return rc
