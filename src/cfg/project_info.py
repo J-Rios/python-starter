@@ -14,10 +14,10 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-###############################################################################
-# TOML Parser (compatible with Python 3.8+)
-###############################################################################
 
+###############################################################################
+# TOML Parser
+###############################################################################
 
 def _find_project_root():
     """Find project root by searching for pyproject.toml.
@@ -52,16 +52,12 @@ def _find_project_root():
 
 def _load_toml():
     """Load pyproject.toml file."""
-    # Try Python 3.11+ tomllib first
     try:
         import tomllib  # noqa: F401
     except ImportError:
-        try:
-            import tomli as tomllib
-        except ImportError:
-            raise ImportError(
-                "tomllib or tomli required. Install with: pip install tomli"
-            )
+        raise ImportError(
+            "tomllib or tomli required. Install with: pip install tomli"
+        )
     # Find project root and load TOML
     project_root = _find_project_root()
     toml_file = project_root / "pyproject.toml"
@@ -72,7 +68,6 @@ def _load_toml():
 ###############################################################################
 # Project Metadata (from pyproject.toml)
 ###############################################################################
-
 
 class PROJECT:
     """Project metadata loaded from pyproject.toml.
