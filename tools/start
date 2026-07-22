@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Source configuration
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+PROJECT_ROOT="$DIR/.."
+source "${PROJECT_ROOT}/config.sh"
+
+# Check if process is already running
+PID=$(ps -aux | grep -e "[p]ython.*${APP_ENTRY}" | awk 'FNR == 1 {print $2}')
+
+if [ ! -z "$PID" ]; then
+    echo "Process already running (PID: $PID)."
+    exit 1
+fi
+
+# Launch the application locally
+echo "Starting application..."
+if ! source_venv; then
+    exit 1
+fi
+
+nohup python3 -u "${PROJECT_ROOT}/src/${APP_ENTRY}" >> "${PROJECT_ROOT}/${DEV_LOG_FILE}" 2>&1 &
+deactivate
+sleep 1
+"${DIR}/status"
+
+exit 0

@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+# Source configuration
+PRJ_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." >/dev/null 2>&1 && pwd)"
+source "${PRJ_DIR}/config.sh"
+
+cd "${PRJ_DIR}" || exit 1
+
+log_info "Setting up development environment..."
+log_info ""
+
+# Create Virtual Environment
+if [ -d "${VENV_DIR}" ]; then
+    log_warn "Virtual environment already exists at ${VENV_DIR}"
+    read -p "Recreate it? (y/n): " -r
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        log_info "Using existing virtual environment"
+        exit 0
+    fi
+    log_info "Removing old virtual environment..."
+    rm -rf "${VENV_DIR}"
+fi
+
+log_info "Creating virtual environment..."
+${PYTHON_CMD} -m venv "${VENV_DIR}"
+
+# Activate and upgrade pip
+log_info "Upgrading pip, setuptools, wheel..."
+source_venv
+${PIP_CMD} install --upgrade pip setuptools wheel
+
+# Install dependencies
+log_info "Installing requirements from requirements.txt..."
+${PIP_CMD} install -r requirements.txt
+
+# Install dev requirements if requested
+log_info ""
+read -p "Install development dependencies (pytest, black, flake8, etc.)? (y/n): " -r
+echo ""
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    log_info "Installing development dependencies..."
+    ${PIP_CMD} install -r requirements_dev.txt
+    log_info "Installing pre-commit hooks..."
+    pre-commit install 2>/dev/null || log_warn "Could not install pre-commit hooks"
+fi
+
+deactivate
+
+log_info ""
+log_info "Installed packages:"
+source_venv
+${PIP_CMD} list
+deactivate
+
+log_success "Development environment setup completed!"
+log_info ""
+log_info "Next steps:"
+log_info "  - Run tests: make test"
+log_info "  - Start application: make start"
+log_info ""
+
+exit 0

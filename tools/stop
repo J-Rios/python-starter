@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# Source configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." >/dev/null 2>&1 && pwd)"
+source "${PROJECT_ROOT}/config.sh"
+
+# Process ID - Match app.py process
+PID=$(ps -aux | grep -e "[p]ython.*${APP_ENTRY}" | awk 'FNR == 1 {print $2}')
+
+# Check if process is running
+if [ -z "$PID" ]; then
+    echo "Application is not running."
+    exit 1
+fi
+
+# Kill the process
+echo "Stopping application (PID: $PID)..."
+kill "$PID"
+
+# Wait for process to terminate (max 10 seconds)
+for i in {1..10}; do
+    if ! kill -0 "$PID" 2>/dev/null; then
+        echo "Application stopped successfully."
+        exit 0
+    fi
+    sleep 1
+done
+
+# Force kill if still running
+if kill -0 "$PID" 2>/dev/null; then
+    echo "Forcing termination..."
+    kill -9 "$PID" 2>/dev/null || true
+fi
+
+"${SCRIPT_DIR}/status"
+
+exit 0

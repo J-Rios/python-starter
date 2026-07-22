@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Source configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+PRJ_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." >/dev/null 2>&1 && pwd)"
+source "${PRJ_DIR}/config.sh"
+
+# Check virtual environment exists
+if ! check_venv; then
+    exit 1
+fi
+
+# Check if process is already running
+PID=$(ps -aux | grep -e "[p]ython.*${APP_ENTRY}" | awk 'FNR == 1 {print $2}')
+
+if [ ! -z "$PID" ]; then
+    log_warn "Application already running (PID: $PID)"
+    exit 0
+fi
+
+# Launch the application
+log_info "Starting application..."
+source_venv
+nohup ${PYTHON_CMD} -u "${PRJ_DIR}/src/${APP_ENTRY}" >> "${PRJ_DIR}/${DEV_LOG_FILE}" 2>&1 &
+deactivate
+sleep 1
+"${SCRIPT_DIR}/status"
+
+exit 0
