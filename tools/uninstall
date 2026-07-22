@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Source configuration
+PRJ_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." >/dev/null 2>&1 && pwd)"
+source "${PRJ_DIR}/config.sh"
+
+# Get path to actual uninstall script
+UNINSTALL_SCRIPT="${PRJ_DIR}/deploy/linux/linux_uninstall"
+
+if [ ! -f "$UNINSTALL_SCRIPT" ]; then
+    log_error "Uninstallation script not found at: $UNINSTALL_SCRIPT"
+    exit 1
+fi
+
+chmod +x "$UNINSTALL_SCRIPT"
+"$UNINSTALL_SCRIPT" "$@"
+
+exit $?

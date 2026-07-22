@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Source configuration
+PRJ_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." >/dev/null 2>&1 && pwd)"
+source "${PRJ_DIR}/config.sh"
+
+# Get path to actual install script
+INSTALL_SCRIPT="${PRJ_DIR}/deploy/linux/linux_install"
+
+if [ ! -f "$INSTALL_SCRIPT" ]; then
+    log_error "Installation script not found at: $INSTALL_SCRIPT"
+    exit 1
+fi
+
+chmod +x "$INSTALL_SCRIPT"
+"$INSTALL_SCRIPT" "$@"
+
+exit $?

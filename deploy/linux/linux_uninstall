@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+
+###############################################################################
+# Linux Uninstallation Script for Python Starter Application
+###############################################################################
+
+set -e
+
+# Source configuration from project root
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." >/dev/null 2>&1 && pwd)"
+source "${PROJECT_ROOT}/config.sh"
+
+###############################################################################
+# Uninstall-specific Functions
+###############################################################################
+
+stop_service() {
+    log_info "Stopping systemd service"
+    if systemctl is-active --quiet "${APP_NAME}"; then
+        log_info "Stopping ${APP_NAME} service..."
+        systemctl stop "${APP_NAME}"
+        sleep 2
+        log_success "Service stopped"
+    else
+        log_info "${APP_NAME} service is not running"
+    fi
+}
+
+disable_service() {
+    log_info "Disabling systemd service"
+    if systemctl is-enabled "${APP_NAME}" 2>/dev/null; then
+        systemctl disable "${APP_NAME}"
+        log_success "Service disabled"
+    else
+        log_info "${APP_NAME} service is not enabled"
+    fi
+}
+
+remove_service_file() {
+    log_info "Removing service file"
+    SERVICE_FILE="/etc/systemd/system/${APP_NAME}.service"
+    if [ -f "${SERVICE_FILE}" ]; then
+        rm -f "${SERVICE_FILE}"
+        systemctl daemon-reload
+        log_success "Service file removed"
+    else
+        log_warn "Service file not found at ${SERVICE_FILE}"
+    fi
+}
+
+remove_app_files() {
+    log_info "Removing application files"
+    if [ -d "${APP_DIR}" ]; then
+        rm -rf "${APP_DIR}"
+        log_success "Application directory removed"
+    else
+        log_warn "Application directory not found at ${APP_DIR}"
+    fi
+}
+
+remove_logs() {
+    log_info "Removing log files"
+    if [ -d "${LOG_DIR}" ]; then
+        rm -rf "${LOG_DIR}"
+        log_success "Log directory removed"
+    else
+        log_warn "Log directory not found at ${LOG_DIR}"
+    fi
+}
+
+###############################################################################
+# Main Execution
+###############################################################################
+
+main() {
+    echo ""
+    echo "=========================================="
+    echo "Uninstalling ${APP_NAME}"
+    echo "=========================================="
+    echo ""
+    check_root || exit 1
+    stop_service
+    disable_service
+    remove_service_file
+    remove_app_files
+    remove_logs
+    echo ""
+    echo "=========================================="
+    log_success "Uninstallation completed successfully!"
+    echo "=========================================="
+    echo ""
+    log_info "Application has been removed from:"
+    log_info "  Directory: ${APP_DIR}"
+    log_info "  Logs: ${LOG_DIR}"
+    log_info "  Service: /etc/systemd/system/${APP_NAME}.service"
+    echo ""
+}
+
+# Confirm before uninstalling
+confirm_uninstall() {
+    echo "WARNING: This will uninstall ${APP_NAME} from your system."
+    echo ""
+    read -p "Are you sure you want to continue? (yes/no): " -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy][Ee][Ss]$ ]]; then
+        log_info "Uninstallation cancelled"
+        exit 0
+    fi
+}
+
+confirm_uninstall
+main "$@"

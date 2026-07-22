@@ -1,0 +1,132 @@
+#!/usr/bin/env bash
+
+###############################################################################
+# Linux Installation Script for Python Starter Application
+###############################################################################
+
+set -e
+
+# Source configuration from project root
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." >/dev/null 2>&1 && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+source "${PROJECT_ROOT}/config.sh"
+
+###############################################################################
+# Additional Functions
+###############################################################################
+
+install_files() {
+    log_info "Installing application files to ${APP_DIR}"
+
+    # Create application directory
+    mkdir -p "${APP_DIR}"
+
+    # Copy source code
+    cp -r "${PROJECT_ROOT}/src" "${APP_DIR}/"
+
+    # Copy configuration files
+    cp "${PROJECT_ROOT}/pyproject.toml" "${APP_DIR}/"
+    cp "${PROJECT_ROOT}/requirements.txt" "${APP_DIR}/"
+
+    # Copy launcher script
+    cp "${SCRIPT_DIR}/launcher" "${APP_DIR}/"
+    chmod +x "${APP_DIR}/launcher"
+
+    log_success "Application files installed"
+}
+
+setup_virtual_env() {
+    log_info "Setting up Python virtual environment"
+    cd "${APP_DIR}" || exit 1
+    ${PYTHON_CMD} -m venv .venv
+    source .venv/bin/activate
+    pip install --upgrade pip setuptools wheel
+    pip install -r requirements.txt
+    deactivate
+    log_success "Virtual environment setup completed"
+}
+
+setup_logging() {
+    log_info "Setting up logging directory"
+    # Create log directory
+    mkdir -p "${LOG_DIR}"
+    touch "${LOG_DIR}/${APP_NAME}.log"
+    # Set permissions
+    chmod 755 "${LOG_DIR}"
+    chmod 644 "${LOG_DIR}/${APP_NAME}.log"
+    log_info "Logging directory configured"
+}
+
+setup_service() {
+    log_info "Setting up systemd service"
+    SERVICE_FILE="/etc/systemd/system/${APP_NAME}.service"
+    SERVICE_SOURCE="${SCRIPT_DIR}/${APP_NAME}.service"
+    # Stop service if running
+    if systemctl is-active --quiet "${APP_NAME}"; then
+        log_info "Stopping existing service..."
+        systemctl stop "${APP_NAME}"
+    fi
+    # Disable if already enabled
+    if systemctl is-enabled "${APP_NAME}" 2>/dev/null; then
+        systemctl disable "${APP_NAME}"
+    fi
+    # Copy service file
+    cp "${SERVICE_SOURCE}" "${SERVICE_FILE}"
+    chmod 644 "${SERVICE_FILE}"
+    # Reload systemd and enable service
+    systemctl daemon-reload
+    systemctl enable "${APP_NAME}"
+    log_info "Systemd service configured"
+}
+
+start_service() {
+    log_info "Starting application service"
+    systemctl start "${APP_NAME}"
+    # Wait a moment for service to start
+    sleep 2
+    # Check service status
+    if systemctl is-active --quiet "${APP_NAME}"; then
+        log_info "Service started successfully"
+        systemctl status "${APP_NAME}" --no-pager
+    else
+        log_error "Service failed to start"
+        systemctl status "${APP_NAME}" --no-pager
+        exit 1
+    fi
+}
+
+###############################################################################
+# Main Execution
+###############################################################################
+
+main() {
+    echo ""
+    echo "=========================================="
+    echo "Installing ${APP_NAME}"
+    echo "=========================================="
+    echo ""
+    check_root
+    install_files
+    setup_virtual_env
+    setup_logging
+    setup_service
+    start_service
+    echo ""
+    echo "=========================================="
+    echo "Installation completed successfully!"
+    echo "=========================================="
+    echo ""
+    echo "Service: ${APP_NAME}.service"
+    echo "Directory: ${APP_DIR}"
+    echo "Logs: ${LOG_DIR}/${APP_NAME}.log"
+    echo ""
+    echo "Useful commands:"
+    echo "  systemctl status ${APP_NAME}"
+    echo "  systemctl start ${APP_NAME}"
+    echo "  systemctl stop ${APP_NAME}"
+    echo "  systemctl restart ${APP_NAME}"
+    echo "  journalctl -u ${APP_NAME} -f"
+    echo ""
+}
+
+main "$@"

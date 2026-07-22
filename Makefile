@@ -2,7 +2,7 @@
 SHELL = /bin/bash
 TOOLS := ./tools
 
-.PHONY: help setup run stop status log errors test lint format clean
+.PHONY: help setup install uninstall run stop status log errors test lint format clean
 
 help:
 	@echo ""
@@ -24,6 +24,10 @@ help:
 	@echo "  make test      - Run unit tests"
 	@echo "  make lint      - Check code style (flake8, pylint)"
 	@echo "  make format    - Format code (black, isort)"
+	@echo ""
+	@echo "SYSTEM INSTALLATION (requires sudo):"
+	@echo "  make install   - Install as Linux service"
+	@echo "  make uninstall - Remove service installation"
 	@echo ""
 	@echo "TROUBLESHOOTING:"
 	@echo "  make errors    - Check for errors in logs"
@@ -67,6 +71,15 @@ lint:
 
 format:
 	@bash -c 'source .venv/bin/activate 2>/dev/null || true; black src/ tests/ && isort src/ tests/ || echo "Run make setup first"'
+
+# System-wide installation
+install:
+	@chmod +x $(TOOLS)/install
+	@sudo $(TOOLS)/install
+
+uninstall:
+	@chmod +x $(TOOLS)/uninstall
+	@sudo $(TOOLS)/uninstall
 
 # Cleanup
 clean:
