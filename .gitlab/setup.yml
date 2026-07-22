@@ -17,10 +17,6 @@ cache:
     - .cache/pip
     - .venv
 
-before_script:
-  - python --version
-  - pip --version
-
 ###############################################################################
 # Setup Job
 ###############################################################################
@@ -38,5 +34,6 @@ setup:dependencies:
     expire_in: 1 hour
   only:
     - merge_requests
-    - development
     - main
+    - streamlit
+    - development

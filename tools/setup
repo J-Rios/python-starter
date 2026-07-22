@@ -40,8 +40,6 @@ echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     log_info "Installing development dependencies..."
     ${PIP_CMD} install -r requirements_dev.txt
-    log_info "Installing pre-commit hooks..."
-    pre-commit install 2>/dev/null || log_warn "Could not install pre-commit hooks"
 fi
 
 deactivate
