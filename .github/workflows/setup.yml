@@ -1,0 +1,45 @@
+name: Reusable Setup Workflow
+
+on:
+  workflow_call
+
+jobs:
+  setup:
+    name: Setup Dependencies
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+
+      - name: Cache pip packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements_dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Cache venv
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('**/requirements_dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-venv-
+
+      - name: Install dependencies
+        run: make setup
+
+      - name: Display installed packages
+        run: .venv/bin/pip list
