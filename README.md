@@ -112,12 +112,6 @@ make format
 
 ## Troubleshooting
 
-**Setup fails:**
-```bash
-python3 --version  # Ensure Python 3.8+
-make setup         # Try again
-```
-
 **App won't start:**
 ```bash
 make log           # Check logs

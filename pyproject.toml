@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68.0", "wheel"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,7 +7,7 @@ name = "streamlit-starter"
 version = "1.0.0"
 description = "Base Python streamlit project template for starting new projects"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 authors = [
     {name = "sonnen GmbH"}
 ]
@@ -16,29 +16,25 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Operating System :: OS Independent",
 ]
 
 dependencies = [
-    "tomli>=2.0.0;python_version<'3.11'",
+    "streamlit==1.59.2"
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.4.0",
-    "pytest-cov>=4.1.0",
-    "black>=23.12.0",
-    "isort>=5.13.0",
-    "flake8>=6.1.0",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "black>=26.5.1",
+    "isort>=8.0.1",
+    "flake8>=7.3.0",
     "flake8-docstrings>=1.7.0",
-    "mypy>=1.7.0",
-    "pylint>=3.0.0",
-    "pyright>=1.1.0",
+    "mypy>=2.3.0",
+    "pylint>=4.0.6",
+    "pyright>=1.1.411",
 ]
 
 [project.scripts]
@@ -50,7 +46,7 @@ py-modules = []
 
 [tool.black]
 line-length = 80
-target-version = ["py38", "py39", "py310", "py311", "py312"]
+target-version = ["py312", "py313", "py314"]
 include = '\.pyi?$'
 extend-exclude = '''
 /(
@@ -76,7 +72,7 @@ ensure_newline_before_comments = true
 skip_gitignore = true
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.12"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false

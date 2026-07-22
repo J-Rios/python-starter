@@ -5,7 +5,7 @@ Get started with the project in 5 minutes.
 ## Prerequisites
 
 - Linux (Ubuntu 18.04+ or Debian 10+)
-- Python 3.8 or higher
+- Python 3.12 or higher
 - Git
 - Make (optional)
 
@@ -144,7 +144,7 @@ sudo make uninstall
 ### "make setup" fails
 
 ```bash
-# Ensure Python 3.8+ is installed
+# Ensure Python 3.12+ is installed
 python3 --version
 
 # Try manually
