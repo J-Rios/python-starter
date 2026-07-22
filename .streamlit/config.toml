@@ -5,11 +5,11 @@ developmentMode = false
 [browser]
 gatherUsageStats = false
 serverAddress = "localhost"
-serverPort = 65300
+serverPort = 65000
 
 [server]
 #address =
-port = 65300
+port = 65000
 baseUrlPath = ""
 
 [client]

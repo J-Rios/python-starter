@@ -35,6 +35,9 @@ install_files() {
     cp "${SCRIPT_DIR}/launcher" "${APP_DIR}/"
     chmod +x "${APP_DIR}/launcher"
 
+    # Copy streamlit setup file
+    cp "${PROJECT_ROOT}/.streamlit" "${APP_DIR}/"
+
     log_success "Application files installed"
 }
 
