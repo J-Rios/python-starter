@@ -43,7 +43,7 @@ dev = [
 ]
 
 [project.scripts]
-python-starter = "src.main:main"
+python-starter = "src.app:app"
 
 [tool.setuptools]
 packages = ["src"]
