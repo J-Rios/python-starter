@@ -1,0 +1,16 @@
+{
+    // Set a vertical line to show the max line length for project
+    "editor.rulers": [ 72, 79 ],
+
+    // Controls whether text format should be copied into the clipboard
+    "editor.copyWithSyntaxHighlighting": false,
+
+    // Trim spaces on save
+    "files.trimTrailingWhitespace": true,
+
+    // Set format document formatter to black
+    "editor.defaultFormatter": "ms-python.black-formatter",
+
+    // Python Debug Server
+    "python.languageServer": "Pylance"
+}
