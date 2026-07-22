@@ -15,9 +15,6 @@ pyright==1.1.341
 # Linting
 pylint==3.0.3
 
-# Git Hooks
-pre-commit==3.5.0
-
 # Development
 ipython==8.17.2
 notebook==7.0.6

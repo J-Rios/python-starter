@@ -45,7 +45,6 @@ make uninstall
 - 🎨 Code formatting (black, isort)
 - 🔍 Linting (flake8, pylint, pyright)
 - 📦 Type checking (mypy)
-- 🪝 Pre-commit hooks
 - 🚀 Production-ready configuration
 - 🔄 Centralized configuration system
 
